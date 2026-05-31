@@ -2,6 +2,7 @@
   "name": "defi-dungeons-verse",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "main": "index.js",
   "description": "A 2D top-down pixel world where you can play, explore, and earn with your Aavegotchi",
   "workspaces": [

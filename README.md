@@ -155,3 +155,10 @@ pnpm --filter @gotchiverse/client test:e2e
 If you are using coding agents in this repo, read:
 
 - `AGENTS.md` for TDD expectations, delivery checklist, and repo conventions.
+
+## License
+
+Software source code and documentation are MIT-licensed. Media assets are not
+automatically covered by the MIT license; see `ASSET_LICENSES.md` and
+`NOTICE.md` before reusing sprites, music, sound effects, logos, screenshots, or
+other artwork.

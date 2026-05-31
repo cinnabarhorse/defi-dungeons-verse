@@ -2,6 +2,7 @@
   "name": "@gotchiverse/client",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "prebuild": "tsx scripts/prebuild-optimize.ts",
     "build": "npm run prebuild && NODE_OPTIONS='--max-old-space-size=4096' next build",
