@@ -1,0 +1,14 @@
+{
+  "functions": {
+    "apps/client/src/app/**": {
+      "runtime": "nodejs18.x",
+      "includeFiles": "data/maps/**"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/apps/client/$1"
+    }
+  ]
+}

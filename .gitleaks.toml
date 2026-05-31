@@ -1,0 +1,7 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Public Ethereum contract and wallet addresses"
+regexTarget = "secret"
+regexes = ['''0x[a-fA-F0-9]{40}''']

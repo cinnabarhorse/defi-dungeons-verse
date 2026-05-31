@@ -1,0 +1,63 @@
+'use client';
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '../ui/Accordion';
+
+const FAQ_ITEMS = [
+  {
+    id: 'what',
+    question: 'What is a top-up?',
+    answer:
+      'Lock your USDC or GHO on Base for 30 days to mint the same amount of Credits. Credits can be spent instantly in the Gotchiverse.',
+  },
+  {
+    id: 'claim',
+    question: 'When can I claim?',
+    answer:
+      'Once the unlock date arrives you can submit an on-chain transaction to withdraw your funds and any unlocked credits.',
+  },
+  {
+    id: 'auto-renew',
+    question: 'What does Auto-renew do?',
+    answer:
+      'When enabled, your deposit will automatically re-lock for another 30 days using the original principal when the unlock date is reached.',
+  },
+  {
+    id: 'fees',
+    question: 'Are there fees?',
+    answer:
+      'Gas fees apply on every on-chain action. Additional protocol fees will appear here once they are confirmed.',
+  },
+  {
+    id: 'networks',
+    question: 'Which networks are supported?',
+    answer:
+      'Top-ups currently target the Base network. We display prompts to help you switch to the correct network inside the wallet flow.',
+  },
+];
+
+export function TopupFaq() {
+  return (
+    <section className="space-y-4">
+      <div>
+        <h2 className="text-lg font-semibold tracking-tight">FAQ</h2>
+        <p className="text-sm text-muted-foreground">
+          Tap a question to learn how top-ups work today.
+        </p>
+      </div>
+
+      <Accordion type="single" collapsible className="w-full">
+        {FAQ_ITEMS.map((item) => (
+          <AccordionItem key={item.id} value={item.id}>
+            <AccordionTrigger>{item.question}</AccordionTrigger>
+            <AccordionContent>{item.answer}</AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </section>
+  );
+}
