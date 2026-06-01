@@ -12,9 +12,9 @@ import { PlayerProvider } from '../components/providers/PlayerProvider';
 import { BaseMiniAppReady } from '../components/base-miniapp/ready';
 
 export const metadata: Metadata = {
-  title: 'DeFi Dungeon',
+  title: 'DeFi Dungeons Verse',
   description:
-    'A 2D top-down pixel world where you can play, explore, and earn with your Aavegotchi.',
+    'A real-time Aavegotchi dungeon world with multiplayer movement, combat, loot, progression, and DeFi rewards.',
   manifest: '/manifest.json',
   icons: {
     icon: '/icon-192x192.png',
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'DeFi Dungeon',
+    title: 'DeFi Dungeons Verse',
   },
   formatDetection: {
     telephone: false,
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
         title: 'Play Now',
         action: {
           type: 'launch_miniapp',
-          name: 'DeFi Dungeon',
+          name: 'DeFi Dungeons Verse',
           url: process.env.NEXT_PUBLIC_URL ?? '',
           splashImageUrl: `${process.env.NEXT_PUBLIC_URL ?? ''}/images/splash.png`,
           splashBackgroundColor: '#000000',

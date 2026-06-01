@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT",
   "main": "index.js",
-  "description": "A 2D top-down pixel world where you can play, explore, and earn with your Aavegotchi",
+  "description": "A real-time Aavegotchi dungeon world with multiplayer movement, combat, loot, progression, and DeFi rewards",
   "workspaces": [
     "apps/*",
     "packages/*"

@@ -17,6 +17,7 @@ build/
 # Root level compiled files from TypeScript
 *.js
 !scripts/*.js
+!jest.env.setup.js
 !*.config.js
 !jest.config.js
 !next.config.js
@@ -27,6 +28,7 @@ build/
 # Environment variables
 .env*.local
 .env
+.env.test
 
 # Local session dumps and private provider metadata
 cookies.txt
@@ -57,6 +59,10 @@ pids
 # Coverage directory used by tools like istanbul
 coverage/
 *.lcov
+
+# Browser test artifacts
+test-results/
+playwright-report/
 
 # nyc test coverage
 .nyc_output
@@ -137,3 +143,11 @@ data/maps/.backups/
 gamedesignbible.md
 
 apps/server/public/spritesheets/
+
+# Local screenshots and generated review artifacts
+preview*.png
+*-review*.md
+TEST_*.md
+browser-testing/
+cursor-agent-ui/
+skills/

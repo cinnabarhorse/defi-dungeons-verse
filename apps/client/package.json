@@ -6,7 +6,7 @@
   "scripts": {
     "prebuild": "tsx scripts/prebuild-optimize.ts",
     "build": "npm run prebuild && NODE_OPTIONS='--max-old-space-size=4096' next build",
-    "pre-dev": "echo '🔧 Building client dependencies...' && cd ../../packages/types && pnpm build && cd ../shared && pnpm build && cd ../../apps/client",
+    "pre-dev": "pnpm -w generate:shared",
     "dev": "next dev -p 3001 -H 0.0.0.0",
     "start": "next start -p 3001",
     "lint": "next lint",

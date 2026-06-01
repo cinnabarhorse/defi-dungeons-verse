@@ -1,66 +1,60 @@
-# DeFi Dungeons Monorepo
+# DeFi Dungeons Verse
 
-DeFi Dungeons is a monorepo for the Aavegotchi game stack:
+DeFi Dungeons Verse is the real-time Aavegotchi dungeon world. It pairs a Next.js/Phaser client with a Colyseus/Express server for multiplayer movement, combat, rooms, map exploration, loot, progression, inventory, wallet sessions, and admin tooling.
 
-- `apps/client`: Next.js + Phaser game client (default `http://localhost:3001`)
-- `apps/server`: Colyseus + Express game server (default `http://localhost:1999`)
-- `apps/subgraph`: Subgraph project
-- `packages/*`: shared TypeScript packages used by apps
+This repository is the Verse app, not the separate idle-run game. Contributors should expect active client/server gameplay code, shared generated game data, Supabase-backed persistence, and a Goldsky subgraph package.
 
-This README focuses on getting the repo running locally and providing a reliable day-to-day workflow.
+## Stack
+
+- Next.js 14 App Router client in `apps/client`
+- Phaser game scene and React HUD/UI
+- Colyseus and Express game server in `apps/server`
+- Shared generated data from `data`
+- Supabase/Postgres for player, economy, inventory, run, and auth data
+- Goldsky subgraph in `apps/subgraph`
+- pnpm workspaces with Turborepo
+
+## Repository Layout
+
+```text
+apps/
+  client/      Next.js app, Phaser game, UI routes, Playwright E2E
+  server/      Colyseus rooms, Express API, jobs, game systems
+  subgraph/    Goldsky subgraph package
+data/          Source-of-truth game data copied into client and server
+db/            SQL migrations for Supabase/Postgres
+docs/          Architecture, systems, and feature notes
+packages/      Shared domain packages
+scripts/       Data generation, simulation, migration, and ops helpers
+supabase/      Edge function configuration
+```
 
 ## Prerequisites
 
-- Node.js `>=18`
-- pnpm `>=8` (repo is pinned to `pnpm@8.12.0`)
-- A Postgres/Supabase database you can connect to
+- Node.js 20
+- pnpm 8
+- A Supabase/Postgres database for full server flows
 
-## 1) Install dependencies
+## Local Setup
 
 ```bash
 pnpm install
+pnpm run generate:shared
 ```
 
-## 2) Configure environment variables
+The server loads env files from repo root, server dir, and cwd. For local development, a root `.env.local` is the simplest path.
 
-The server loads env files from multiple places. Practical default: put a single `.env.local` in repo root.
-
-### Required to boot the server
-
-The server fails on startup unless these are set:
-
-- `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `SUPABASE_DB_URL` or `DATABASE_URL`
-
-### Recommended for local development
-
-- `PORT=1999`
-- `CLIENT_ORIGIN=http://localhost:3001`
-- `SESSION_SECRET=<long-random-string>`
-- `SIWE_DOMAIN=localhost`
-- `SIWE_ALLOWED_DOMAINS=localhost,localhost:3001`
-- `BASE_RPC_URL=https://mainnet.base.org`
-
-### Client-side optional vars
-
-These are not required for basic local boot, but enable wallet/realtime flows:
-
-- `NEXT_PUBLIC_APP_SERVER_URL=http://localhost:1999`
-- `NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>`
-- `NEXT_PUBLIC_THIRDWEB_CLIENT_ID=<thirdweb-client-id>`
-- `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=<walletconnect-project-id>`
-- `NEXT_PUBLIC_SIWE_DOMAIN=localhost`
-- `NEXT_PUBLIC_SIWE_URI=http://localhost:3001`
-
-### Example `.env.local`
+Minimum server values:
 
 ```bash
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-SUPABASE_DB_URL=<postgres-url>
+SUPABASE_DB_URL=postgres://...
+```
 
+Recommended local values:
+
+```bash
 PORT=1999
 CLIENT_ORIGIN=http://localhost:3001
 SESSION_SECRET=replace-with-random-secret
@@ -71,94 +65,70 @@ BASE_RPC_URL=https://mainnet.base.org
 NEXT_PUBLIC_APP_SERVER_URL=http://localhost:1999
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_THIRDWEB_CLIENT_ID=your-thirdweb-client-id
 NEXT_PUBLIC_SIWE_DOMAIN=localhost
 NEXT_PUBLIC_SIWE_URI=http://localhost:3001
 ```
 
-## 3) Run database migrations (and optional seed)
-
-```bash
-pnpm db:migrate
-pnpm db:seed
-```
-
-If migrations fail because of connection resolution, run:
-
-```bash
-pnpm tsx scripts/print-env-precedence.ts
-```
-
-## 4) Start local development
+## Development
 
 ```bash
 pnpm dev
 ```
 
-This runs Turborepo dev tasks for the workspace after generating shared assets.
-
 Local endpoints:
 
 - Client: `http://localhost:3001`
-- Server health: `http://localhost:1999/health`
+- Server: `http://localhost:1999`
+- Health check: `http://localhost:1999/health`
 
-## Common development commands
+Common commands:
 
 ```bash
-pnpm dev                 # Start local dev (client + server through turbo)
-pnpm stop                # Stop local dev processes/ports
 pnpm generate:shared     # Regenerate shared data artifacts
 pnpm type-check          # Workspace type checks
 pnpm lint                # Workspace linting
-pnpm build               # Build client (via turbo)
+pnpm build               # Build the client
+pnpm test                # Workspace tests through Turbo
+pnpm test:loot           # Root Jest script/gameplay specs
+pnpm test:e2e            # Playwright E2E through Turbo
+pnpm db:migrate          # Run SQL migrations
+pnpm db:seed             # Seed local data
 ```
+
+Game data is generated from `data` into app workspaces. Edit source files under `data`, then run:
+
+```bash
+pnpm run generate:shared
+```
+
+## Current Game Systems
+
+- Real-time room joining, movement, combat, enemy, item, and portal systems
+- Phaser world rendering with fog of war, minimap, environment, NPC, loot, and sprite managers
+- Aavegotchi and hero character selection with wearable/equipment support
+- Inventory, equipment, credits, withdrawals, loot catalog, and admin APIs
+- Progression, XP, kill streaks, spells, grenades, abilities, elite enemies, and boss mechanics
+- Map editor, tiled importer, simulation pages, stats, leaderboard, and admin dashboards
+- Supabase-backed auth/session state and Goldsky-backed deposit indexing
 
 ## Testing
 
-### Workspace
+For docs-only changes, a focused test may be enough. For source changes, run the narrowest affected tests plus type-check.
 
 ```bash
-pnpm test
+pnpm type-check
+pnpm test:loot
+```
+
+Run E2E when touching game startup, routing, Phaser/Colyseus integration, wallet/session flows, inventory, or UI navigation:
+
+```bash
 pnpm test:e2e
 ```
 
-### Server script tests (root Jest config)
-
-```bash
-pnpm test:loot
-# or directly
-pnpm jest -c jest.config.js
-```
-
-### Client unit tests
-
-```bash
-pnpm --filter @gotchiverse/client test
-```
-
-### Client Playwright tests
-
-```bash
-pnpm --filter @gotchiverse/client test:e2e
-```
-
-## Troubleshooting
-
-- `SUPABASE_URL is not configured`:
-  Set server env vars in `.env.local` at repo root.
-- Data mismatch after editing `data/*` files:
-  Run `pnpm generate:shared` and retry.
-- Unexpected runtime env behavior:
-  Use `pnpm tsx scripts/print-env-precedence.ts` to see effective env values and source files.
-
-## Agent workflow
-
-If you are using coding agents in this repo, read:
-
-- `AGENTS.md` for TDD expectations, delivery checklist, and repo conventions.
+E2E and full server flows require a reachable Supabase/Postgres database. Use `pnpm tsx scripts/print-env-precedence.ts` if env resolution is unclear.
 
 ## License
 
-Software source code and documentation are MIT-licensed. Media assets are not
-automatically covered by the MIT license; see `ASSET_LICENSES.md` and
-`NOTICE.md` before reusing sprites, music, sound effects, logos, screenshots, or
-other artwork.
+Software source code and documentation are MIT-licensed. Media assets are not automatically covered by the MIT license; see `ASSET_LICENSES.md` and `NOTICE.md` before reusing sprites, music, sound effects, logos, screenshots, or other artwork.

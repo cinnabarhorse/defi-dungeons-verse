@@ -1,4 +1,4 @@
-import type { PoolClient, QueryResult } from 'pg';
+import type { Pool, PoolClient, QueryResult } from 'pg';
 import { getPgPool } from '../client';
 import type {
   WithdrawalSettingsRecord,
@@ -18,11 +18,11 @@ function mapRow(row: WithdrawalSettingsRow): WithdrawalSettingsRecord {
   };
 }
 
-function getPool(client?: PoolClient) {
+function getPool(client?: Pool | PoolClient): Pool | PoolClient {
   return client ?? getPgPool();
 }
 
-async function ensureRow(pool: PoolClient): Promise<void> {
+async function ensureRow(pool: Pool | PoolClient): Promise<void> {
   await pool.query(
     `insert into public.withdrawal_settings (id)
      values ($1)
@@ -32,7 +32,7 @@ async function ensureRow(pool: PoolClient): Promise<void> {
 }
 
 export async function getSettings(
-  client?: PoolClient
+  client?: Pool | PoolClient
 ): Promise<WithdrawalSettingsRecord> {
   const pool = getPool(client);
   await ensureRow(pool);
@@ -53,7 +53,7 @@ export interface UpdateWithdrawalSettingsInput {
   isAutoProcessingEnabled?: boolean;
   isBatchProcessingPaused?: boolean;
   isConfirmationPaused?: boolean;
-  client?: PoolClient;
+  client?: Pool | PoolClient;
 }
 
 export async function updateSettings(

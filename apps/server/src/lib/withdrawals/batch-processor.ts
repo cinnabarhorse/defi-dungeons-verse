@@ -160,8 +160,10 @@ async function processSingleWithdrawal(): Promise<ProcessResult> {
       failureReason: 'tx_broadcast_error',
     });
     emitServerLog('withdrawal.tx_failed', {
-      withdrawalId: withdrawal.id,
-      reason: 'tx_broadcast_error',
+      details: {
+        withdrawalId: withdrawal.id,
+        reason: 'tx_broadcast_error',
+      },
     });
     return {
       state: 'failure',

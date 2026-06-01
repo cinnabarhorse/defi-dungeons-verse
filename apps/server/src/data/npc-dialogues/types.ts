@@ -8,13 +8,19 @@ export interface DialogueNode<K extends string> {
   responses: Array<DialogueResponse<K>>;
 }
 
-export interface NpcDialogueSpec<T extends Record<string, DialogueNode<keyof T>>> {
+type DialogueKey<T> = Extract<keyof T, string>;
+
+export interface NpcDialogueSpec<
+  T extends Record<string, DialogueNode<DialogueKey<T>>>,
+> {
   npcId: string;
   npcName: string;
   dialogues: T;
 }
 
-export function defineNpcDialogue<T extends Record<string, DialogueNode<keyof T>>>(
+export function defineNpcDialogue<
+  T extends Record<string, DialogueNode<DialogueKey<T>>>,
+>(
   spec: {
     npcId: string;
     npcName: string;
@@ -32,7 +38,9 @@ export function defineNpcDialogue<T extends Record<string, DialogueNode<keyof T>
   };
 }
 
-export function toRuntimeJson<T extends Record<string, DialogueNode<keyof T>>>(
+export function toRuntimeJson<
+  T extends Record<string, DialogueNode<DialogueKey<T>>>,
+>(
   spec: {
     npcId: string;
     npcName: string;
